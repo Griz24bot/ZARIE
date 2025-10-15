@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>LineageMapper Tree</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    .node circle { stroke: #333; stroke-width: 2px; }
+    .node text { font: 14px sans-serif; }
+    .link { fill: none; stroke: #ccc; stroke-width: 2px; }
+    .controls { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <select id="epochSelector">
+    <option value="epoch1">Epoch I</option>
+    <option value="epoch2">Epoch II</option>
+    <option value="epoch3">Epoch III</option>
+    <option value="epoch4">Epoch IV</option>
+  </select>
+  <svg width="960" height="600"></svg>
+</body>
+<script>
+const svg = d3.select("svg");
+const width = +svg.attr("width");
+const height = +svg.attr("height");
+const g = svg.append("g").attr("transform", "translate(40,0)");
+
+const tree = d3.tree().size([height - 100, width - 160]);
+const duration = 750;
+
+async function fetchLineageData(epoch) {
+  const response = await fetch(`http://localhost:8000/lineage/${epoch}`);
+  const data = await response.json();
+  return data.tree;
+}
+
+function update(epochKey) {
+  fetchLineageData(epochKey).then(data => {
+    g.selectAll("*").remove(); // Clear previous tree
+    const root = d3.hierarchy(data);
+    tree(root);
+
+    const nodes = root.descendants();
+    const links = root.links();
+
+    const node = g.selectAll(".node")
+      .data(nodes)
+      .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", d => `translate(${d.y},${d.x})`);
+
+    const roiScale = d3.scaleLinear().domain([0, 50]).range(["#e0f7fa", "#00695c"]);
+
+    node.append("circle")
+      .attr("r", 0)
+      .transition().duration(duration)
+      .attr("r", 6)
+      .style("fill", d => d.data.performance ? roiScale(d.data.performance.roi) : "#69b3a2");
+
+    node.append("title")
+      .text(d => `Mutation: ${d.data.mutation || 'N/A'}\nSteward: ${d.data.steward || 'N/A'}\nROI: ${d.data.performance ? d.data.performance.roi : 'N/A'}%\nDrawdown: ${d.data.performance ? d.data.performance.drawdown : 'N/A'}%`);
+
+    node.append("text")
+      .attr("dy", 3)
+      .attr("x", d => d.children ? -10 : 10)
+      .style("text-anchor", d => d.children ? "end" : "start")
+      .text(d => d.data.name + (d.data.performance ? ` (ROI: ${d.data.performance.roi}%)` : ""));
+
+    g.selectAll(".link")
+      .data(links)
+      .enter().append("path")
+      .attr("class", "link")
+      .attr("d", d3.linkHorizontal()
+        .x(d => d.y)
+        .y(d => d.x))
+      .attr("stroke-opacity", 0)
+      .transition().duration(duration)
+      .attr("stroke-opacity", 1);
+  });
+}
+
+document.getElementById("epochSelector").addEventListener("change", e => {
+  update(e.target.value);
+});
+
+update("epoch1"); // Initial render
+
+// Real-time updates every 10 seconds
+setInterval(() => {
+  const currentEpoch = document.getElementById("epochSelector").value;
+  update(currentEpoch);
+}, 10000);
+
+// WebSocket for live mutations
+const socket = new WebSocket("ws://localhost:8000/ws/lineage");
+socket.onmessage = (event) => {
+  const update = JSON.parse(event.data);
+  console.log("Live update:", update);
+  // In real, update the tree with new node or modify existing
+  // For demo, just log
+};
+</script>
+</html>

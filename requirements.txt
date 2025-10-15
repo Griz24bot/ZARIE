@@ -1,0 +1,17 @@
+fastapi
+websockets
+pydantic
+speechrecognition
+pyttsx3
+openai
+requests
+python-telegram-bot
+alpaca-trade-api
+robin-stocks
+pandas
+numpy
+aiohttp
+websockets
+pytest
+python-dotenv
+uvicorn
