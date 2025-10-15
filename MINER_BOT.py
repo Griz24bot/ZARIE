@@ -539,8 +539,21 @@ class TelegramBot:
 # Global Telegram bot instance
 telegram_bot = TelegramBot()
 
+def first_launch_ritual():
+    zarie.speak("""
+    Welcome, Sovereign Architect.
+    This vessel has landed on a new domain.
+    Vault integrity confirmed. Glyphs intact.
+    Awaiting override protocol or lineage onboarding.
+    """)
+    dashboard.animate("glyph_arrival_pulse", target="vault_seal")
+    vault.log_to_vault("First Launch", {"device": "Laptop", "timestamp": time.time()})
+
 # Usage
 if __name__ == "__main__":
+    # First launch ritual
+    first_launch_ritual()
+
     # Start Telegram bot
     telegram_bot.start_polling()
 

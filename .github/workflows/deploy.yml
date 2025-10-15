@@ -1,0 +1,16 @@
+name: Deploy to Mobile Vessel
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Deploy to Mobile Vessel
+      run: echo "Deploying to mobile vessel..."
