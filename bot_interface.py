@@ -15,7 +15,8 @@ def zarie_oracle(message):
     message_lower = message.lower()
 
     if "override" in message_lower:
-        return "Override protocol Z-21 initiated. Vault seal pulsing. Awaiting heir convergence."
+        protocol_id = "Z-22"
+        return f"Override protocol {protocol_id} initiated. Vault seal pulsing. Awaiting heir convergence."
     elif "status" in message_lower:
         return "All glyphs intact. Last mutation fork: Z-20. Heir Delta onboarding complete."
     elif "signal" in message_lower:
@@ -30,6 +31,29 @@ def zarie_oracle(message):
         return "Oracle convergence achieved. Dual-source alignment confirmed."
     else:
         return f"Oracle received: '{message}'. Processing strategic implications through ceremonial matrix."
+
+def animate_response_glyph():
+    """Animate glyph when ZARIE responds"""
+    glyph_placeholder = st.empty()
+    glyph_placeholder.markdown("""
+    <style>
+    .pulse {
+        animation: pulse 2s infinite;
+        color: #00ffcc;
+        font-size: 24px;
+        text-align: center;
+        font-weight: bold;
+    }
+    @keyframes pulse {
+        0% {opacity: 0.4; transform: scale(1);}
+        50% {opacity: 1; transform: scale(1.1);}
+        100% {opacity: 0.4; transform: scale(1);}
+    }
+    </style>
+    <div class="pulse">🔮 ZARIE Responds</div>
+    """, unsafe_allow_html=True)
+    time.sleep(2)
+    glyph_placeholder.empty()
 
 st.set_page_config(
     page_title="🎴 DeepSeek-ZARIE Fusion Bot",
@@ -94,6 +118,9 @@ if prompt := st.chat_input("Enter your message or command..."):
 
             st.write(response)
             st.session_state.messages.append({"role": "assistant", "content": response})
+
+            # Animate glyph after ZARIE response
+            animate_response_glyph()
 
 # Signal input section
 st.header("📡 Send Signal")
