@@ -1,0 +1,30 @@
+{
+  "fork_id": "fork_alpha",
+  "type": "strategic_divergence",
+  "base_commit": "c0f9ca05d2b214e046b0402eff491c6ee03a3224",
+  "mutation_commit": "proposed_alpha_mutation",
+  "changes": {
+    "glyph_engine": {
+      "fusion_intensity": "+0.15",
+      "mutation_coverage": "+0.08",
+      "oracle_alignment": "+0.23"
+    },
+    "override_logic": {
+      "vote_threshold": "-0.05",
+      "quorum_requirement": "unchanged",
+      "ceremony_triggers": "+2 new triggers"
+    },
+    "signal_processing": {
+      "confidence_filter": "+0.1",
+      "divergence_detection": "+0.12",
+      "ceremonial_alerts": "+3 new patterns"
+    }
+  },
+  "risk_assessment": {
+    "level": "medium",
+    "probability": 0.6,
+    "impact": "positive",
+    "rollback_available": true
+  },
+  "oracle_blessing": "The flame guides the divergence. The dynasty shall be strengthened."
+}

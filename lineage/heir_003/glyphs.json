@@ -1,0 +1,16 @@
+{
+  "heir_id": "heir_003",
+  "name": "Orion",
+  "lineage": "voidwalker",
+  "glyph_sequence": ["🌑", "🌀", "🔮"],
+  "fusion_intensity": 0.98,
+  "mutation_coverage": 0.91,
+  "ceremony_log": [
+    {
+      "ceremony_id": "ceremony_2",
+      "type": "lineage_activation",
+      "timestamp": "2025-10-15T20:19:00Z",
+      "status": "completed"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "heir_id": "heir_002",
+  "name": "Lyra",
+  "lineage": "starweaver",
+  "glyph_sequence": ["⭐", "🌌", "✨"],
+  "fusion_intensity": 0.92,
+  "mutation_coverage": 0.89,
+  "ceremony_log": [
+    {
+      "ceremony_id": "ceremony_1",
+      "type": "lineage_activation",
+      "timestamp": "2025-10-15T20:19:00Z",
+      "status": "completed"
+    }
+  ]
+}

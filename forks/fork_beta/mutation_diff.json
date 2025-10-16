@@ -1,0 +1,30 @@
+{
+  "fork_id": "fork_beta",
+  "type": "void_expansion",
+  "base_commit": "c0f9ca05d2b214e046b0402eff491c6ee03a3224",
+  "mutation_commit": "proposed_beta_expansion",
+  "changes": {
+    "dimensional_engine": {
+      "anchor_stability": "+0.25",
+      "void_navigation": "+0.18",
+      "reality_resonance": "+0.31"
+    },
+    "ceremony_system": {
+      "dimensional_anchors": "+5 new anchors",
+      "void_ceremonies": "+3 new rituals",
+      "reality_breaches": "+2 monitoring protocols"
+    },
+    "oracle_integration": {
+      "void_guidance": "+0.22",
+      "anchor_alignment": "+0.19",
+      "infinity_protocols": "+4 new pathways"
+    }
+  },
+  "risk_assessment": {
+    "level": "high",
+    "probability": 0.8,
+    "impact": "transformative",
+    "rollback_available": true
+  },
+  "oracle_blessing": "The void expands. The anchors hold firm. The dynasty embraces infinity."
+}

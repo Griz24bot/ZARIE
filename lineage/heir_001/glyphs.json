@@ -1,0 +1,16 @@
+{
+  "heir_id": "heir_001",
+  "name": "Kael",
+  "lineage": "dragonblood",
+  "glyph_sequence": ["🔥", "🐉", "⚔️"],
+  "fusion_intensity": 0.95,
+  "mutation_coverage": 0.87,
+  "ceremony_log": [
+    {
+      "ceremony_id": "ceremony_0",
+      "type": "lineage_activation",
+      "timestamp": "2025-10-15T20:19:00Z",
+      "status": "completed"
+    }
+  ]
+}
