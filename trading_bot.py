@@ -11,6 +11,7 @@ class TradingViewWebhookBot:
         self.bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "7575096974:AAGn1yVwkaNbsNFYHkz6cvPq6crAWkMaoeE")
         self.chat_id = os.getenv("TELEGRAM_CHAT_ID", "your_chat_id_here")
         self.telegram_bot = Bot(token=self.bot_token)
+        self.MODE = os.getenv("MODE", "SIMULATION")  # LIVE or SIMULATION
 
     def send_trade_signal(self, signal):
         """Route trade signals to secure Telegram channel"""
@@ -26,6 +27,20 @@ class TradingViewWebhookBot:
             print(f"TradingView signal sent: {signal}")
         except Exception as e:
             print(f"Failed to send trade signal: {e}")
+
+    def calculate_capital_allocation(self, signal, price):
+        """Calculate capital allocation for live trades"""
+        # Simple risk management - allocate 10% of available capital per trade
+        available_capital = 10000  # This should come from a config or API
+        risk_percentage = 0.1
+        capital_allocation = available_capital * risk_percentage
+        return capital_allocation
+
+    def route_order(self, signal, capital_allocation):
+        """Route order to trading platform"""
+        # Placeholder for actual order routing logic
+        print(f"Routing order: {signal} with capital ${capital_allocation}")
+        # This would integrate with actual trading APIs (Binance, Coinbase, etc.)
 
     def process_signal(self, data):
         """Process incoming TradingView webhook signal"""
@@ -56,8 +71,14 @@ class TradingViewWebhookBot:
                 "timestamp": time
             })
 
-            # Trigger override vote for trades
-            if order_action in ["buy", "sell"]:
+            # Execute live trades if in LIVE mode
+            if self.MODE == "LIVE" and order_action in ["buy", "sell"]:
+                capital_allocation = self.calculate_capital_allocation(signal, price)
+                self.route_order(signal, capital_allocation)
+                vault.log_to_vault("Live Trade", {"signal": signal, "capital": capital_allocation})
+                zarie.speak(f"Live trade executed: {signal}. Capital allocated: ${capital_allocation}.")
+            elif order_action in ["buy", "sell"]:
+                # Simulation mode - trigger override vote
                 dashboard.trigger_override("Z-18")
                 zarie.speak(f"Heirs summoned for {order_action} override on {ticker}.")
 

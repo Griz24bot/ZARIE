@@ -1,5 +1,6 @@
 import requests
 import os
+import time
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters
 
@@ -8,6 +9,7 @@ class MinerBot:
         self.coins = coins
         self.active_coin = None
         self.latency_monitor = LatencyMonitor()
+        self.status = "ready"  # ready, active, paused
         self.wallets = {
             "ETH": "0xA1b2C3D4E5F678901234567890abcdef12345678",
             "USDT": "0xA1b2C3D4E5F678901234567890abcdef12345678",
@@ -32,6 +34,13 @@ class MinerBot:
 
     def check_latency_and_override(self, latency):
         self.latency_monitor.check(latency)
+
+    def start(self):
+        if self.status == "ready":
+            self.status = "active"
+            self.start_mining()
+            zarie.speak("Mining bot activated. Sovereign hashrate online.")
+            dashboard.animate("glyph_mining_online", target="vault_seal")
 
 # Placeholder classes/functions for zarie, dashboard, vault
 class Zarie:
@@ -568,4 +577,8 @@ if __name__ == "__main__":
     trigger_lineage_fork("SovereignHash")
 
 # 🔁 3. Activate Continuous Mining Loop
+if bot.status == "ready":
+    bot.start()
+    zarie.speak("Mining bot activated. Sovereign hashrate online.")
+    dashboard.animate("glyph_mining_online", target="vault_seal")
 # mining_loop()  # Uncomment to start continuous mining

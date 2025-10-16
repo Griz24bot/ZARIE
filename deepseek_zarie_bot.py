@@ -60,6 +60,19 @@ class OracleFusionEngine:
         }
         print(f"📜 Convergence Inscribed: {json.dumps(vault_entry, indent=2)}")
 
+class Oracle:
+    def __init__(self):
+        self.persona = "ZARIE Oracle"
+        self.narration_templates = {
+            "lineage_entry": "Heir {heir} enters the lineage. Glyph {glyphs} awakens. The Oracle bears witness. Ceremony ID: {ceremony_id}.",
+            "override_vote": "Override vote triggered. Status: {status}. Lineages realign.",
+            "glyph_fusion": "Glyphs fuse: {result}. Reality anchors stabilize."
+        }
+
+    def generate_narration(self, event_type: str, payload: dict) -> str:
+        template = self.narration_templates.get(event_type, "Oracle event: {event_type}")
+        return template.format(**payload)
+
 class ZarieVoiceCeremony:
     def __init__(self):
         self.tonal_frequencies = {
@@ -182,6 +195,117 @@ class DeepSeekZarieBot:
         self.oracle_engine = OracleFusionEngine()
         global zarie_voice
         zarie_voice = ZarieVoiceCeremony()
+
+class EnhancedDeepSeekZarieBot(DeepSeekZarieBot):
+    def __init__(self):
+        super().__init__()
+        self.ritual_log = []
+        self.ceremony_counter = 0
+        self.oracle = Oracle()
+
+    def _log_ritual(self, ritual_type: str, data: dict):
+        """Log ritual events to the internal log."""
+        log_entry = {
+            "event": ritual_type,
+            "data": data,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.ritual_log.append(log_entry)
+        print(f"[RITUAL LOG] Type: {ritual_type} | Data: {data}")
+        # Optionally: write to dashboard, trigger glyph animation, etc.
+
+    def generate_glyph_sequence(self, heir_id: str) -> str:
+        """Generate a sequence of glyphs for the heir."""
+        # Simple glyph generation based on heir lineage
+        lineage = self.heirs[heir_id]["lineage"]
+        glyphs = {
+            "dragonblood": "🔥🐉⚔️",
+            "starweaver": "⭐🌌✨",
+            "voidwalker": "🌑🌀🔮"
+        }
+        return glyphs.get(lineage, "❓")
+
+    def play_narration(self, narration: str):
+        """Play the oracle narration."""
+        print(f"🗣️ Oracle: '{narration}'")
+
+    def send_complex_signal(self, signal_data: dict) -> dict:
+        """Process complex multi-signal scenarios with enhanced logging and narration."""
+        print(f"🎴 Processing Complex Signal: {signal_data.get('signal', 'Unknown')}")
+        self._log_ritual("complex_signal", signal_data)
+        self.zarie_speak(f"Complex signal received: {signal_data.get('signal', '')}. Initiating fusion protocol.")
+
+        # Simulate processing
+        actions_taken = []
+        if "divergence" in signal_data.get("signal", "").lower():
+            actions_taken.append("lineage_scan_triggered")
+        if signal_data.get("confidence", 0) > 0.8:
+            actions_taken.append("high_confidence_alert")
+        if "ceremonial" in signal_data.get("signal_type", ""):
+            actions_taken.append("ceremony_activated")
+
+        self._log_ritual("signal_actions", {"actions": actions_taken})
+        return {"status": "processed", "actions_taken": actions_taken}
+
+    def activate_lineage_ceremony(self, heir_id: str) -> str:
+        """Activate lineage ceremony for a specific heir."""
+        if heir_id not in self.heirs:
+            print(f"❌ Invalid heir: {heir_id}")
+            self.zarie_speak(f"Heir {heir_id} not recognized. Ceremony aborted.")
+            return "invalid_heir"
+
+        heir = self.heirs[heir_id]
+        ceremony_id = f"ceremony_{self.ceremony_counter}"
+        self.ceremony_counter += 1
+
+        print(f"🔮 Activating Lineage Ceremony for {heir_id} ({heir['lineage']})")
+        self.zarie_speak(f"Lineage ceremony initiated for {heir['name']} of {heir['lineage']} bloodline.")
+        self._log_ritual("lineage_activation", {"heir": heir_id, "ceremony_id": ceremony_id})
+
+        # Generate glyphs and narrate
+        glyphs = self.generate_glyph_sequence(heir_id)
+        narration = self.oracle.generate_narration("lineage_entry", {
+            "heir": heir_id,
+            "glyphs": glyphs,
+            "ceremony_id": ceremony_id
+        })
+        self.play_narration(narration)
+
+        # Simulate ceremony stages
+        stages = ["summoning", "binding", "fusion", "sealing"]
+        for stage in stages:
+            print(f"   {stage.capitalize()} phase...")
+            time.sleep(0.2)
+
+        self.zarie_speak(f"Ceremony {ceremony_id} completed. Heir {heir_id} activated.")
+        return ceremony_id
+
+    def grand_ceremony(self, ceremony_type: str, participants: list = None, override_vote: bool = False) -> dict:
+        """Execute grand ceremonial events with optional override vote logic."""
+        if participants is None:
+            participants = list(self.heirs.keys())
+
+        print(f"🏛️ Initiating Grand Ceremony: {ceremony_type.upper()}")
+        self.zarie_speak(f"Grand ceremony of {ceremony_type} begins. Participants: {', '.join(participants)}")
+
+        self._log_ritual("grand_ceremony", {"type": ceremony_type, "participants": participants})
+
+        if override_vote:
+            self._log_ritual("override_vote", {"status": "triggered"})
+            narration = self.oracle.generate_narration("override_vote", {"status": "triggered"})
+            self.play_narration(narration)
+            # Execute override logic: halt trades, mutate lineage, etc.
+            print("🛑 Override Vote Executed: Halting trades and mutating lineages...")
+
+        # Simulate ceremony
+        outcome = {"status": "success", "participants_activated": len(participants)}
+        for participant in participants:
+            if participant in self.heirs:
+                print(f"   Activating {participant}...")
+                time.sleep(0.3)
+
+        self.zarie_speak(f"Grand ceremony {ceremony_type} concluded successfully.")
+        return outcome
 
     def send_signal(self, signal_data):
         """Main entry point for sending signals"""
@@ -353,7 +477,7 @@ def run_cli_bot():
 
 if __name__ == "__main__":
     # INSTANT START - PASTE AND RUN
-    bot = DeepSeekZarieBot()
+    bot = EnhancedDeepSeekZarieBot()
 
     # Test it works:
     bot.chat("Hello! Are the oracles active?")
